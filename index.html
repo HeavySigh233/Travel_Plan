@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>欧洲三国行程概览</title>
+    <style>
+        :root {
+            --primary-color: #8e44ad;
+            --secondary-color: #3498db;
+            --accent-color: #f1c40f;
+            --text-color: #ecf0f1;
+            --background-color: #0a0e17;
+            --card-bg-color: rgba(26, 32, 44, 0.8);
+            --card-border-color: rgba(74, 85, 104, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Starry background */
+        #stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 5s infinite;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            position: relative;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 2.2rem;
+            margin: 30px 0 20px;
+            text-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+        }
+
+        .trip-container {
+            background: linear-gradient(135deg, #4a148c, #311b92);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trip-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="white" opacity="0.3"/></svg>');
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .destination {
+            background-color: var(--card-bg-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .destination:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .destination-title {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            margin: 0 0 15px;
+        }
+
+        .destination-dates {
+            display: inline-block;
+            background-color: rgba(52, 152, 219, 0.2);
+            color: var(--secondary-color);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .destination-desc {
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        .days-list {
+            margin-top: 15px;
+            padding-left: 20px;
+        }
+
+        .day-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .day-link {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            background-color: rgba(142, 68, 173, 0.3);
+            transition: background-color 0.2s;
+            display: block;
+            width: 100%;
+        }
+
+        .day-link:hover {
+            background-color: rgba(142, 68, 173, 0.5);
+        }
+
+        .day-date {
+            margin-right: 15px;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .day-title {
+            flex-grow: 1;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #7f8c8d;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="stars-container"></div>
+    
+    <div class="container">
+        <header>
+            <h1>欧洲三国行程概览</h1>
+            <p>2025年5月12日 - 5月23日</p>
+        </header>
+
+        <div class="trip-container">
+            <h2>行程总览</h2>
+
+            <div class="destination">
+                <h3 class="destination-title">巴塞罗那，西班牙</h3>
+                <span class="destination-dates">5月12日 - 5月17日 (5天)</span>
+                <p class="destination-desc">
+                    探索高迪的建筑杰作，漫步哥特区古老街道，享受地中海美食与阳光。
+                </p>
+                <div class="days-list">
+                    <div class="day-item">
+                        <a href="day1.html" class="day-link">
+                            <span class="day-date">5月12日</span>
+                            <span class="day-title">抵达日 - 哥特区 & 巴塞罗内塔海滩</span>
+                        </a>
+                    </div>
+                    <div class="day-item">
+                        <a href="day2.html" class="day-link">
+                            <span class="day-date">5月13日</span>
+                            <span class="day-title">高迪建筑精华游</span>
+                        </a>
+                    </div>
+                    <div class="day-item">
+                        <a href="day3.html" class="day-link">
+                            <span class="day-date">5月14日</span>
+                            <span class="day-title">桂尔公园 & 蒙特惠奇山</span>
+                        </a>
+                    </div>
+                    <div class="day-item">
+                        <a href="day4.html" class="day-link">
+                            <span class="day-date">5月15日</span>
+                            <span class="day-title">毕加索博物馆 & 老城区</span>
+                        </a>
+                    </div>
+                    <div class="day-item">
+                        <a href="day5.html" class="day-link">
+                            <span class="day-date">5月16日</span>
+                            <span class="day-title">La Roca Village购物</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="destination">
+                <h3 class="destination-title">巴黎，法国</h3>
+                <span class="destination-dates">5月17日 - 5月20日 (3天)</span>
+                <p class="destination-desc">
+                    浪漫之都巴黎，探索埃菲尔铁塔、卢浮宫和香榭丽舍大街。
+                </p>
+                <div class="days-list">
+                    <div class="day-item">
+                        <a href="#" class="day-link">
+                            <span class="day-date">5月17日</span>
+                            <span class="day-title">抵达日 & 埃菲尔铁塔</span>
+                        </a>
+                    </div>
+                    <div class="day-item">
+                        <a href="#" class="day-link">
+                            <span class="day-date">5月18日</span>
+                            <span class="day-title">卢浮宫 & 香榭丽舍</span>
+                        </a>
+                    </div>
+                    <div class="day-item">
+                        <a href="#" class="day-link">
+                            <span class="day-date">5月19日</span>
+                            <span class="day-title">蒙马特 & 塞纳河游船</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="destination">
+                <h3 class="destination-title">罗马，意大利</h3>
+                <span class="destination-dates">5月20日 - 5月23日 (3天)</span>
+                <p class="destination-desc">
+                    永恒之城罗马，参观斗兽场、梵蒂冈和特雷维喷泉。
+                </p>
+                <div class="days-list">
+                    <div class="day-item">
+                        <a href="#" class="day-link">
+                            <span class="day-date">5月20日</span>
+                            <span class="day-title">抵达日 & 罗马斗兽场</span>
+                        </a>
+                    </div>
+                    <div class="day-item">
+                        <a href="#" class="day-link">
+                            <span class="day-date">5月21日</span>
+                            <span class="day-title">梵蒂冈 & 圣彼得大教堂</span>
+                        </a>
+                    </div>
+                    <div class="day-item">
+                        <a href="#" class="day-link">
+                            <span class="day-date">5月22日</span>
+                            <span class="day-title">特雷维喷泉 & 西班牙广场</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2025 专业旅行行程规划 | 让每次旅行都成为难忘的回忆</p>
+        </footer>
+    </div>
+
+    <script>
+        // 创建星空背景
+        function createStars() {
+            const starsContainer = document.getElementById('stars-container');
+            const starsCount = 200;
+            
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // 随机位置
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // 随机大小
+                const size = Math.random() * 2;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // 随机动画延迟
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+        });
+    </script>
+</body>
+</html>

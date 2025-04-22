@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巴塞罗那行程 - 第六天</title>
+    <style>
+        :root {
+            --primary-color: #8e44ad;
+            --secondary-color: #3498db;
+            --accent-color: #f1c40f;
+            --text-color: #ecf0f1;
+            --background-color: #0a0e17;
+            --card-bg-color: rgba(26, 32, 44, 0.8);
+            --card-border-color: rgba(74, 85, 104, 0.4);
+            --day-gradient-start: #4a148c;
+            --day-gradient-end: #311b92;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Starry background */
+        #stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 5s infinite;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            position: relative;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 2.2rem;
+            margin: 30px 0 20px;
+            text-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+        }
+
+        h3 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin: 25px 0 15px;
+            text-shadow: 0 0 6px rgba(142, 68, 173, 0.5);
+        }
+
+        h4 {
+            color: var(--accent-color);
+            font-size: 1.4rem;
+            margin: 20px 0 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        .day-container {
+            background: linear-gradient(135deg, var(--day-gradient-start), var(--day-gradient-end));
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .day-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="white" opacity="0.3"/></svg>');
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .day-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .day-title h2 {
+            margin: 0;
+        }
+
+        .day-date {
+            background-color: var(--accent-color);
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-left: 15px;
+            font-size: 0.9rem;
+        }
+
+        .activity {
+            background-color: var(--card-bg-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .activity:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .activity-time {
+            display: inline-block;
+            background-color: rgba(52, 152, 219, 0.2);
+            color: var(--secondary-color);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .activity-title {
+            font-size: 1.4rem;
+            color: var(--accent-color);
+            margin: 0 0 15px;
+        }
+
+        .activity-details {
+            margin-top: 15px;
+        }
+
+        .detail-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .detail-icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+
+        .detail-text {
+            flex-grow: 1;
+        }
+
+        .location-info {
+            background-color: rgba(46, 204, 113, 0.1);
+            border-left: 3px solid #2ecc71;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .location-title {
+            font-weight: bold;
+            color: #2ecc71;
+            margin-bottom: 5px;
+        }
+
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .link-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: transform 0.2s, opacity 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .link-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .map-link {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .website-link {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .ticket-link {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .link-icon {
+            margin-right: 8px;
+        }
+
+        .day-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+        }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            background-color: var(--primary-color);
+            color: white;
+            transition: opacity 0.2s;
+        }
+
+        .nav-btn:hover {
+            opacity: 0.8;
+        }
+
+        .nav-btn.next {
+            background-color: var(--secondary-color);
+            margin-left: auto;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #7f8c8d;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 100;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            h3 {
+                font-size: 1.5rem;
+            }
+
+            .day-container {
+                padding: 20px;
+            }
+
+            .activity {
+                padding: 15px;
+            }
+
+            .links {
+                flex-direction: column;
+            }
+
+            .link-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="stars-container"></div>
+    
+    <div class="container">
+        <header>
+            <h1>巴塞罗那5天行程规划</h1>
+        </header>
+
+        <div class="day-container">
+            <div class="day-title">
+                <h2>第六天</h2>
+                <span class="day-date">2025.05.17，周六</span>
+            </div>
+            <h3>离开日</h3>
+
+            <div class="activity">
+                <span class="activity-time">上午</span>
+                <h4 class="activity-title">前往机场</h4>
+                <p>根据航班时间，安排前往巴塞罗那机场。</p>
+                <div class="activity-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">✈️</span>
+                        <div class="detail-text">
+                            <strong>机场信息：</strong>巴塞罗那-埃尔普拉特机场（BCN）是巴塞罗那的主要国际机场，距离市中心约12公里。
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">🚕</span>
+                        <div class="detail-text">
+                            <strong>交通建议：</strong>建议提前3小时到达机场办理国际航班手续。可选择出租车（约30分钟，30-40欧元）或机场巴士（Aerobús，约35分钟，单程5.90欧元）。
+                        </div>
+                    </div>
+                    <div class="location-info">
+                        <div class="location-title">巴塞罗那-埃尔普拉特机场</div>
+                        <div>08820 El Prat de Llobregat, Barcelona, Spain</div>
+                    </div>
+                </div>
+                <div class="links">
+                    <a href="https://www.google.com/maps/place/Barcelona+Airport/@41.2974,2.0833,17z/" target="_blank" class="link-btn map-link">
+                        <span class="link-icon">🗺️</span>Google地图
+                    </a>
+                    <a href="https://www.barcelona-airport.com/" target="_blank" class="link-btn website-link">
+                        <span class="link-icon">🌐</span>机场官网
+                    </a>
+                </div>
+            </div>
+
+            <div class="activity">
+                <span class="activity-time">如果时间允许</span>
+                <h4 class="activity-title">最后的活动</h4>
+                <p>在住宿附近散步或享用早餐，告别巴塞罗那。</p>
+                <div class="activity-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">☕</span>
+                        <div class="detail-text">
+                            <strong>建议：</strong>可以在住宿附近的咖啡馆享用最后一顿西班牙早餐，品尝传统的巧克力油条（Churros con Chocolate）。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="day-navigation">
+            <a href="index.html" class="nav-btn">← 返回行程概览</a>
+            <a href="day5.html" class="nav-btn">← 第五天</a>
+        </div>
+
+        <footer>
+            <p>© 2025 专业旅行行程规划 | 让每次旅行都成为难忘的回忆</p>
+        </footer>
+
+        <a href="#" class="back-to-top" id="backToTop">↑</a>
+    </div>
+
+    <script>
+        // 创建星空背景
+        function createStars() {
+            const starsContainer = document.getElementById('stars-container');
+            const starsCount = 200;
+            
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // 随机位置
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // 随机大小
+                const size = Math.random() * 2;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // 随机动画延迟
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // 返回顶部按钮
+        function setupBackToTop() {
+            const backToTop = document.getElementById('backToTop');
+            
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+            });
+            
+            backToTop.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            setupBackToTop();
+        });
+    </script>
+</body>
+</html>

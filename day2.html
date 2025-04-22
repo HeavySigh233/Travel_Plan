@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巴塞罗那行程 - 第二天</title>
+    <style>
+        :root {
+            --primary-color: #8e44ad;
+            --secondary-color: #3498db;
+            --accent-color: #f1c40f;
+            --text-color: #ecf0f1;
+            --background-color: #0a0e17;
+            --card-bg-color: rgba(26, 32, 44, 0.8);
+            --card-border-color: rgba(74, 85, 104, 0.4);
+            --day-gradient-start: #4a148c;
+            --day-gradient-end: #311b92;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Starry background */
+        #stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 5s infinite;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            position: relative;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 2.2rem;
+            margin: 30px 0 20px;
+            text-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+        }
+
+        h3 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin: 25px 0 15px;
+            text-shadow: 0 0 6px rgba(142, 68, 173, 0.5);
+        }
+
+        h4 {
+            color: var(--accent-color);
+            font-size: 1.4rem;
+            margin: 20px 0 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        .day-container {
+            background: linear-gradient(135deg, var(--day-gradient-start), var(--day-gradient-end));
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .day-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="white" opacity="0.3"/></svg>');
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .day-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .day-title h2 {
+            margin: 0;
+        }
+
+        .day-date {
+            background-color: var(--accent-color);
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-left: 15px;
+            font-size: 0.9rem;
+        }
+
+        .activity {
+            background-color: var(--card-bg-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .activity:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .activity-time {
+            display: inline-block;
+            background-color: rgba(52, 152, 219, 0.2);
+            color: var(--secondary-color);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .activity-title {
+            font-size: 1.4rem;
+            color: var(--accent-color);
+            margin: 0 0 15px;
+        }
+
+        .activity-details {
+            margin-top: 15px;
+        }
+
+        .detail-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .detail-icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+
+        .detail-text {
+            flex-grow: 1;
+        }
+
+        .location-info {
+            background-color: rgba(46, 204, 113, 0.1);
+            border-left: 3px solid #2ecc71;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .location-title {
+            font-weight: bold;
+            color: #2ecc71;
+            margin-bottom: 5px;
+        }
+
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .link-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: transform 0.2s, opacity 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .link-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .map-link {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .website-link {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .ticket-link {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .link-icon {
+            margin-right: 8px;
+        }
+
+        .day-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+        }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            background-color: var(--primary-color);
+            color: white;
+            transition: opacity 0.2s;
+        }
+
+        .nav-btn:hover {
+            opacity: 0.8;
+        }
+
+        .nav-btn.next {
+            background-color: var(--secondary-color);
+            margin-left: auto;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #7f8c8d;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 100;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            h3 {
+                font-size: 1.5rem;
+            }
+
+            .day-container {
+                padding: 20px;
+            }
+
+            .activity {
+                padding: 15px;
+            }
+
+            .links {
+                flex-direction: column;
+            }
+
+            .link-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="stars-container"></div>
+    
+    <div class="container">
+        <header>
+            <h1>巴塞罗那5天行程规划</h1>
+        </header>
+
+        <div class="day-container">
+            <div class="day-title">
+                <h2>第二天</h2>
+                <span class="day-date">2025.05.13，周二</span>
+            </div>
+            <h3>高迪建筑精华游</h3>
+
+            <div class="activity">
+                <span class="activity-time">09:00-11:00</span>
+                <h4 class="activity-title">巴特罗之家</h4>
+                <p>探索安东尼·高迪最具创意的建筑作品之一，这座充满曲线和色彩的建筑灵感来自海洋和自然元素。</p>
+                <div class="activity-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">📝</span>
+                        <div class="detail-text">
+                            <strong>景点描述：</strong>巴特罗之家是高迪对传统建筑的重新诠释，其波浪形的外观、彩色马赛克和独特的阳台设计使其成为巴塞罗那最具标志性的建筑之一。内部设计同样令人惊叹，几乎没有直线，充满了有机形态和自然光。
+                        </div>
+                    </div>
+                    <div class="location-info">
+                        <div class="location-title">巴特罗之家</div>
+                        <div>Passeig de Gràcia, 43, 08007 Barcelona, Spain</div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">🕒</span>
+                        <div class="detail-text">
+                            <strong>开放时间：</strong>9:00-20:00（最后入场19:00）
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">💰</span>
+                        <div class="detail-text">
+                            <strong>门票价格：</strong>约35-39欧元（含音频导览）
+                        </div>
+                    </div>
+                </div>
+                <div class="links">
+                    <a href="https://maps.app.goo.gl/mRWPiG8h3zpeK2pVA" target="_blank" class="link-btn map-link">
+                        <span class="link-icon">🗺️</span>Google地图
+                    </a>
+                    <a href="https://www.casabatllo.es/" target="_blank" class="link-btn website-link">
+                        <span class="link-icon">🌐</span>官方网站
+                    </a>
+                    <a href="https://www.casabatllo.es/en/buy-tickets/" target="_blank" class="link-btn ticket-link">
+                        <span class="link-icon">🎫</span>购票链接
+                    </a>
+                </div>
+            </div>
+
+            <div class="activity">
+                <span class="activity-time">11:15-13:00</span>
+                <h4 class="activity-title">米拉之家</h4>
+                <p>参观高迪的另一杰作，也被称为"采石场"，因其独特的外观而得名。</p>
+                <div class="activity-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">📝</span>
+                        <div class="detail-text">
+                            <strong>景点描述：</strong>米拉之家是高迪设计的最后一座民用建筑，其波浪形外观和奇特的烟囱是其标志性特征。屋顶露台是参观的重点，可以近距离欣赏高迪设计的雕塑般的烟囱和通风塔。
+                        </div>
+                    </div>
+                    <div class="location-info">
+                        <div class="location-title">米拉之家</div>
+                        <div>Provença, 261-265, 08008 Barcelona, Spain</div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">🕒</span>
+                        <div class="detail-text">
+                            <strong>开放时间：</strong>9:00-20:30（日场），21:00-23:00（夜场）
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">💰</span>
+                        <div class="detail-text">
+                            <strong>门票价格：</strong>约25欧元（含音频导览）
+                        </div>
+                    </div>
+                </div>
+                <div class="links">
+                    <a href="https://maps.app.goo.gl/wbnjwif4WW5XtKiL6" target="_blank" class="link-btn map-link">
+                        <span class="link-icon">🗺️</span>Google地图
+                    </a>
+                    <a href="https://www.lapedrera.com/" target="_blank" class="link-btn website-link">
+                        <span class="link-icon">🌐</span>官方网站
+                    </a>
+                    <a href="https://www.lapedrera.com/en/home" target="_blank" class="link-btn ticket-link">
+                        <span class="link-icon">🎫</span>购票链接
+                    </a>
+                </div>
+            </div>
+
+            <div class="activity">
+                <span class="activity-time">13:00-14:30</span>
+                <h4 class="activity-title">午餐</h4>
+                <p>在格拉西亚大道附近的餐厅用餐，推荐尝试当地的地中海风味料理。</p>
+                <div class="activity-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">🍽️</span>
+                        <div class="detail-text">
+                            <strong>餐厅推荐：</strong>格拉西亚大道周边有许多优质餐厅，如Cervecería Catalana（提供美味的塔帕斯）或Restaurante Hofmann（米其林星级餐厅）。
+                        </div>
+                    </div>
+                    <div class="location-info">
+                        <div class="location-title">Cervecería Catalana</div>
+                        <div>Carrer de Mallorca, 236, 08008 Barcelona, Spain</div>
+                    </div>
+                    <div class="links">
+                        <a href="https://maps.app.goo.gl/zUjZKAqQPpBcYQ2z5" target="_blank" class="link-btn map-link">
+                            <span class="link-icon">🗺️</span>Cervecería Catalana地图
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <span class="activity-time">15:00-17:30</span>
+                <h4 class="activity-title">圣家堂</h4>
+                <p>参观高迪未完成的杰作，巴塞罗那最著名的地标建筑。</p>
+                <div class="activity-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">📝</span>
+                        <div class="detail-text">
+                            <strong>景点描述：</strong>圣家堂是高迪毕生心血的结晶，这座仍在建设中的大教堂融合了哥特式和曲线风格，内部光线透过彩色玻璃创造出令人惊叹的视觉效果。下午3点后的光线穿过彩色玻璃最为美丽。
+                        </div>
+                    </div>
+                    <div class="location-info">
+                        <div class="location-title">圣家堂</div>
+                        <div>Carrer de Mallorca, 401, 08013 Barcelona, Spain</div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">🕒</span>
+                        <div class="detail-text">
+                            <strong>开放时间：</strong>9:00-18:00（11月-2月），9:00-19:00（3月、10月），9:00-20:00（4月-9月）
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">💰</span>
+                        <div class="detail-text">
+                            <strong>门票价格：</strong>26-38欧元不等（视导览选择而定）
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">🚇</span>
+                        <div class="detail-text">
+                            <strong>交通：</strong>从米拉之家可乘坐地铁L5或巴士约15-20分钟到达
+                        </div>
+                    </div>
+                </div>
+                <div class="links">
+                    <a href="https://maps.app.goo.gl/K8BKi4Efbu5FfaPq7" target="_blank" class="link-btn map-link">
+                        <span class="link-icon">🗺️</span>Google地图
+                    </a>
+                    <a href="https://sagradafamilia.org/" target="_blank" class="link-btn website-link">
+                        <span class="link-icon">🌐</span>官方网站
+                    </a>
+                    <a href="https://sagradafamilia.org/en/tickets-individuals" target="_blank" class="link-btn ticket-link">
+                        <span class="link-icon">🎫</span>购票链接
+                    </a>
+                </div>
+            </div>
+
+            <div class="activity">
+                <span class="activity-time">18:00-20:00</span>
+                <h4 class="activity-title">桂尔公园</h4>
+                <p>参观高迪设计的奇幻公园，欣赏巴塞罗那全景和独特的建筑元素。</p>
+                <div class="activity-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">📝</span>
+                        <div class="detail-text">
+                            <strong>景点描述：</strong>桂尔公园是高迪为工业大亨桂尔设计的住宅区项目，后来成为公共公园。这里充满了高迪标志性的马赛克装饰和有机形态的建筑，尤其是著名的龙形喷泉和波浪形长椅。
+                        </div>
+                    </div>
+                    <div class="location-info">
+                        <div class="location-title">桂尔公园</div>
+                        <div>08024 Barcelona, Spain</div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">🕒</span>
+                        <div class="detail-text">
+                            <strong>开放时间：</strong>9:30-17:30（10月-3月），9:30-19:30（4月-9月）
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">💰</span>
+                        <div class="detail-text">
+                            <strong>门票价格：</strong>约10欧元（必须提前预订时间段）
+                        </div>
+                    </div>
+                    <div class="links">
+                        <a href="https://maps.app.goo.gl/Kr5tqFE2tMdGkqn77" target="_blank" class="link-btn map-link">
+                            <span class="link-icon">🗺️</span>Google地图
+                        </a>
+                        <a href="https://www.parkguell.barcelona/" target="_blank" class="link-btn website-link">
+                            <span class="link-icon">🌐</span>官方网站
+                        </a>
+                        <a href="https://www.parkguell.barcelona/en/buy-tickets" target="_blank" class="link-btn ticket-link">
+                            <span class="link-icon">🎫</span>购票链接
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <span class="activity-time">20:30-22:30</span>
+                <h4 class="activity-title">格拉西亚区晚餐</h4>
+                <p>在格拉西亚区享用当地美食，体验巴塞罗那的夜生活。</p>
+                <div class="activity-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">🍽️</span>
+                        <div class="detail-text">
+                            <strong>餐厅推荐：</strong>格拉西亚区有许多特色餐厅和小酒馆，如La Pubilla（传统加泰罗尼亚菜）或Botafumeiro（知名海鲜餐厅）。
+                        </div>
+                    </div>
+                    <div class="location-info">
+                        <div class="location-title">La Pubilla</div>
+                        <div>Plaça de la Vila de Gràcia, 9, 08012 Barcelona, Spain</div>
+                    </div>
+                    <div class="location-info">
+                        <div class="location-title">Botafumeiro</div>
+                        <div>Carrer Gran de Gràcia, 81, 08012 Barcelona, Spain</div>
+                    </div>
+                    <div class="links">
+                        <a href="https://maps.app.goo.gl/7ebXAmLVMCoRP3De8" target="_blank" class="link-btn map-link">
+                            <span class="link-icon">🗺️</span>La Pubilla地图
+                        </a>
+                        <a href="https://maps.app.goo.gl/rS8JoCbY5rm9wWYz7" target="_blank" class="link-btn map-link">
+                            <span class="link-icon">🗺️</span>Botafumeiro地图
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="day-navigation">
+            <a href="index.html" class="nav-btn">← 返回行程概览</a>
+            <a href="day1.html" class="nav-btn">← 第一天</a>
+            <a href="day3.html" class="nav-btn next">第三天 →</a>
+        </div>
+
+        <footer>
+            <p>© 2025 专业旅行行程规划 | 让每次旅行都成为难忘的回忆</p>
+        </footer>
+
+        <a href="#" class="back-to-top" id="backToTop">↑</a>
+    </div>
+
+    <script>
+        // 创建星空背景
+        function createStars() {
+            const starsContainer = document.getElementById('stars-container');
+            const starsCount = 200;
+            
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // 随机位置
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // 随机大小
+                const size = Math.random() * 2;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // 随机动画延迟
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // 返回顶部按钮
+        function setupBackToTop() {
+            const backToTop = document.getElementById('backToTop');
+            
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+            });
+            
+            backToTop.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            setupBackToTop();
+        });
+    </script>
+</body>
+</html>

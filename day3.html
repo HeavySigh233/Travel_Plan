@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巴塞罗那行程 - 第三天</title>
+    <style>
+        :root {
+            --primary-color: #8e44ad;
+            --secondary-color: #3498db;
+            --accent-color: #f1c40f;
+            --text-color: #ecf0f1;
+            --background-color: #0a0e17;
+            --card-bg-color: rgba(26, 32, 44, 0.8);
+            --card-border-color: rgba(74, 85, 104, 0.4);
+            --day-gradient-start: #4a148c;
+            --day-gradient-end: #311b92;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Starry background */
+        #stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 5s infinite;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            position: relative;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 2.2rem;
+            margin: 30px 0 20px;
+            text-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+        }
+
+        h3 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin: 25px 0 15px;
+            text-shadow: 0 0 6px rgba(142, 68, 173, 0.5);
+        }
+
+        h4 {
+            color: var(--accent-color);
+            font-size: 1.4rem;
+            margin: 20px 0 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        .day-container {
+            background: linear-gradient(135deg, var(--day-gradient-start), var(--day-gradient-end));
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .day-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="white" opacity="0.3"/></svg>');
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .day-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .day-title h2 {
+            margin: 0;
+        }
+
+        .day-date {
+            background-color: var(--accent-color);
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-left: 15px;
+            font-size: 0.9rem;
+        }
+
+        .activity {
+            background-color: var(--card-bg-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .activity:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .activity-time {
+            display: inline-block;
+            background-color: rgba(52, 152, 219, 0.2);
+            color: var(--secondary-color);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .activity-title {
+            font-size: 1.4rem;
+            color: var(--accent-color);
+            margin: 0 0 15px;
+        }
+
+        .activity-details {
+            margin-top: 15px;
+        }
+
+        .detail-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .detail-icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+
+        .detail-text {
+            flex-grow: 1;
+        }
+
+        .location-info {
+            background-color: rgba(46, 204, 113, 0.1);
+            border-left: 3px solid #2ecc71;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .location-title {
+            font-weight: bold;
+            color: #2ecc71;
+            margin-bottom: 5px;
+        }
+
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .link-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: transform 0.2s, opacity 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .link-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .map-link {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .website-link {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .ticket-link {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .link-icon {
+            margin-right: 8px;
+        }
+
+        .day-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+        }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            background-color: var(--primary-color);
+            color: white;
+            transition: opacity 0.2s;
+        }
+
+        .nav-btn:hover {
+            opacity: 0.8;
+        }
+
+        .nav-btn.next {
+            background-color: var(--secondary-color);
+            margin-left: auto;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #7f8c8d;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 100;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            h3 {
+                font-size: 1.5rem;
+            }
+
+            .day-container {
+                padding: 20px;
+            }
+
+            .activity {
+                padding: 15px;
+            }
+
+            .links {
+                flex-direction: column;
+            }
+
+            .link-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="stars-container"></div>
+    
+    <div class="container">
+        <header>
+            <h1>巴塞罗那5天行程规划</h1>
+        </header>
+
+        <div class="day-container">
+            <div class="day-title">
+                <h2>第三天</h2>
+                <span class="day-date">2025.05.14，周三</span>
+            </div>
+            <h3>蒙特惠奇山区+巴塞罗内塔海滩</h3>
+
+            <div class="activity">
+                <span class="activity-time">09:30-12:30</span>
+                <h4 class="activity-title">蒙特惠奇山区探索</h4>
+                <p>参观加泰罗尼亚国家艺术博物馆、奥林匹克体育场和西班牙村。</p>
+                <div class="activity-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">📝</span>
+                        <div class="detail-text">
+                            <strong>景点介绍：</strong>蒙特惠奇山是巴塞罗那的绿色心脏，拥有多个公园、花园和文化设施。您可以参观1992年奥运会的主体育场，探索西班牙村（Poble Espanyol）展示的西班牙各地建筑风格，或者简单地在山上散步，欣赏城市全景。
+                        </div>
+                    </div>
+                    <div class="location-info">
+                        <div class="location-title">加泰罗尼亚国家艺术博物馆</div>
+                        <div>Palau Nacional, Parc de Montjuïc, s/n, 08038 Barcelona, Spain</div>
+                    </div>
+                    <div class="location-info">
+                        <div class="location-title">奥林匹克体育场</div>
+                        <div>Passeig Olímpic, 17, 08038 Barcelona, Spain</div>
+                    </div>
+                    <div class="location-info">
+                        <div class="location-title">西班牙村</div>
+                        <div>Av. Francesc Ferrer i Guàrdia, 13, 08038 Barcelona, Spain</div>
+                    </div>
+                    <div class="links">
+                        <a href="https://www.google.com/maps/place/Montjuïc/@41.3636,2.1619,15z/" target="_blank" class="link-btn map-link">
+                            <span class="link-icon">🗺️</span>蒙特惠奇山地图
+                        </a>
+                        <a href="https://www.poble-espanyol.com/" target="_blank" class="link-btn website-link">
+                            <span class="link-icon">🌐</span>西班牙村官网
+                        </a>
+                        <a href="https://www.museunacional.cat/en" target="_blank" class="link-btn website-link">
+                            <span class="link-icon">🌐</span>艺术博物馆官网
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <span class="activity-time">13:00-14:30</span>
+                <h4 class="activity-title">午餐</h4>
+                <p>在巴塞罗内塔区域享用海鲜午餐。</p>
+                <div class="activity-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">🍽️</span>
+                        <div class="detail-text">
+                            <strong>餐厅推荐：</strong>Can Solé（百年老店）或La Mar Salada（现代海鲜餐厅）。
+                        </div>
+                    </div>
+                    <div class="location-info">
+                        <div class="location-title">Can Solé</div>
+                        <div>Carrer de Sant Carles, 4, 08003 Barcelona, Spain</div>
+                    </div>
+                    <div class="location-info">
+                        <div class="location-title">La Mar Salada</div>
+                        <div>Passeig de Joan de Borbó, 58, 08003 Barcelona, Spain</div>
+                    </div>
+                    <div class="links">
+                        <a href="https://maps.app.goo.gl/8qGBJCBq3ig4yJp68" target="_blank" class="link-btn map-link">
+                            <span class="link-icon">🗺️</span>Can Solé地图
+                        </a>
+                        <a href="https://maps.app.goo.gl/xoGz7a8MASqvJ8ZcA" target="_blank" class="link-btn map-link">
+                            <span class="link-icon">🗺️</span>La Mar Salada地图
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <span class="activity-time">15:00-18:00</span>
+                <h4 class="activity-title">巴塞罗内塔海滩区域</h4>
+                <p>沿着海滨步行道漫步，感受地中海风情。</p>
+                <div class="activity-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">📝</span>
+                        <div class="detail-text">
+                            <strong>景点介绍：</strong>巴塞罗内塔是巴塞罗那最著名的海滩区，拥有4.5公里长的沙滩。您可以沿着海滨步行道漫步，参观现代建筑，如果天气允许，可以在海滩休息或游泳。
+                        </div>
+                    </div>
+                    <div class="location-info">
+                        <div class="location-title">巴塞罗内塔海滩</div>
+                        <div>Passeig Marítim de la Barceloneta, 08003 Barcelona, Spain</div>
+                    </div>
+                    <div class="links">
+                        <a href="https://www.google.com/maps/place/Barceloneta+Beach/@41.3805,2.1925,15z/" target="_blank" class="link-btn map-link">
+                            <span class="link-icon">🗺️</span>海滩地图
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <span class="activity-time">18:30-20:00</span>
+                <h4 class="activity-title">奎尔宫</h4>
+                <p>参观高迪为工业大亨桂尔设计的早期作品，欣赏其独特的建筑风格。</p>
+                <div class="activity-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">📝</span>
+                        <div class="detail-text">
+                            <strong>景点描述：</strong>奎尔宫是高迪为他的主要赞助人桂尔设计的城市宫殿，展示了高迪早期的建筑风格。建筑内部有令人惊叹的中央大厅和独特的烟囱设计，屋顶露台可以欣赏城市景观。
+                        </div>
+                    </div>
+                    <div class="location-info">
+                        <div class="location-title">奎尔宫</div>
+                        <div>Carrer Nou de la Rambla, 3-5, 08001 Barcelona, Spain</div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">🕒</span>
+                        <div class="detail-text">
+                            <strong>开放时间：</strong>10:00-20:00（最后入场19:00）
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">💰</span>
+                        <div class="detail-text">
+                            <strong>门票价格：</strong>约12欧元，可在官网预订
+                        </div>
+                    </div>
+                    <div class="links">
+                        <a href="https://maps.app.goo.gl/q7NvD2xLDu6CA5ba8" target="_blank" class="link-btn map-link">
+                            <span class="link-icon">🗺️</span>Google地图
+                        </a>
+                        <a href="https://palauguell.cat/" target="_blank" class="link-btn website-link">
+                            <span class="link-icon">🌐</span>官方网站
+                        </a>
+                        <a href="https://palauguell.cat/en/buy-tickets" target="_blank" class="link-btn ticket-link">
+                            <span class="link-icon">🎫</span>购票链接
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <span class="activity-time">20:30-23:00</span>
+                <h4 class="activity-title">晚餐和兰布拉大道夜游</h4>
+                <p>在兰布拉大道附近享用晚餐，体验巴塞罗那的夜生活。</p>
+                <div class="activity-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">🍽️</span>
+                        <div class="detail-text">
+                            <strong>餐厅推荐：</strong>兰布拉大道周边有许多餐厅，如El Nacional（美食广场）或Restaurante Los Caracoles（传统加泰罗尼亚菜）。
+                        </div>
+                    </div>
+                    <div class="location-info">
+                        <div class="location-title">El Nacional</div>
+                        <div>Passeig de Gràcia, 24, 08007 Barcelona, Spain</div>
+                    </div>
+                    <div class="location-info">
+                        <div class="location-title">Restaurante Los Caracoles</div>
+                        <div>Carrer dels Escudellers, 14, 08002 Barcelona, Spain</div>
+                    </div>
+                    <div class="links">
+                        <a href="https://maps.app.goo.gl/8dVQosPY7bNwfjK57" target="_blank" class="link-btn map-link">
+                            <span class="link-icon">🗺️</span>兰布拉大道地图
+                        </a>
+                        <a href="https://maps.app.goo.gl/BwLjU7EHrDJ5JMYk7" target="_blank" class="link-btn map-link">
+                            <span class="link-icon">🗺️</span>El Nacional地图
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="day-navigation">
+            <a href="index.html" class="nav-btn">← 返回行程概览</a>
+            <a href="day2.html" class="nav-btn">← 第二天</a>
+            <a href="day4.html" class="nav-btn next">第四天 →</a>
+        </div>
+
+        <footer>
+            <p>© 2025 专业旅行行程规划 | 让每次旅行都成为难忘的回忆</p>
+        </footer>
+
+        <a href="#" class="back-to-top" id="backToTop">↑</a>
+    </div>
+
+    <script>
+        // 创建星空背景
+        function createStars() {
+            const starsContainer = document.getElementById('stars-container');
+            const starsCount = 200;
+            
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // 随机位置
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // 随机大小
+                const size = Math.random() * 2;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // 随机动画延迟
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // 返回顶部按钮
+        function setupBackToTop() {
+            const backToTop = document.getElementById('backToTop');
+            
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+            });
+            
+            backToTop.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            setupBackToTop();
+        });
+    </script>
+</body>
+</html>
